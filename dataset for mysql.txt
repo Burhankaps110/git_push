@@ -1,0 +1,158 @@
+8,management,married,tertiary,no,2143,yes,no,unknown,5,may,261,1,-1,0,unknown,no
+44,technician,single,secondary,no,29,yes,no,unknown,5,may,151,1,-1,0,unknown,no
+33,entrepreneur,married,secondary,no,2,yes,yes,unknown,5,may,76,1,-1,0,unknown,no
+47,blue-collar,married,unknown,no,1506,yes,no,unknown,5,may,92,1,-1,0,unknown,no
+33,unknown,single,unknown,no,1,no,no,unknown,5,may,198,1,-1,0,unknown,no
+35,management,married,tertiary,no,231,yes,no,unknown,5,may,139,1,-1,0,unknown,no
+28,management,single,tertiary,no,447,yes,yes,unknown,5,may,217,1,-1,0,unknown,no
+42,entrepreneur,divorced,tertiary,yes,2,yes,no,unknown,5,may,380,1,-1,0,unknown,no
+
+import mysql.connector as connection
+mydb = connection.connect(host = 'localhost', user = 'root', passwd = '786110252Bu$')
+cursor = my
+
+create table if not exists inueron_worksheet.bank_detail(
+age int, job varchar(30),
+
+# maintain the nomenclature of dataset given, do not
+# go againts it.
+# default is a reserved keyword in sql.
+# to show tables : show table_name
+# to know the description of table : Describe table_name
+# we can insert data in table in bulk also.
+# as of now we will insert some of record.
+
+# * will give all the columns of the table.
+
+# to filter from table : select column1, column2,... from table_name.
+
+# now looking for age = 41 : select * from table_name where column = value.
+# where is like if in python.
+
+# to get unique or distinct values in my column from the table use distinct
+# syntax : select distinct column from table.
+
+# to arrange particular column by ascending order :
+syntax : select * from bank_details order by column.
+
+# to arrange particular column by descending order :
+# syntax :select * from bank_details order by column desc.
+
+# to get count of all the records in the table :
+# syntax = select count(*) from table_name.
+
+# to get sum of a particular column :
+# syntax = select sum(colum_name) from table_name
+
+# query inside query :
+# select * from bank_details where balance = (select min(balance) from bank_details)
+
+# group-by-clause :
+
+# grouping of data and giving count through a particular column :
+# syntax : select marital, count(*) from bank_details group by marital
+
+# grouping of data and giving count and sum of balance through a particular column :
+# syntax :select marital, count(*), sum(balance) from bank_details group by marital
+
+# grouping of data and giving count, sum of balance and avg of balance through a particular column :
+# syntax : select marital, count(*), sum(balance), avg(balance) from bank_details group by marital
+
+# grouping of data and giving count, sum of balance and avg of balance through a particular column and taking only sum of balance above 300:
+# syntax : select marital, count(*), sum(balance), avg(balance) from bank_details group by marital having sum(balance) > 300
+
+# updating table commands :
+
+#  updating a column by giving a condition :
+# syntax :
+set sql_safe_updates = 0
+update bank_details set balance = 0 where job = 'unknown'
+
+update bank_details set contact = 'known', y = 'yes' where month = 'may'
+
+# delete operation in sql :
+# syntax : delete from bank_details where job = 'unknown'
+
+# how we gave function we can create in same way procuders in sql :
+# syntax : DELIMITER&&
+           create procedure procedure_name()
+           BEGIN
+                 -----------
+                 -----------
+                 -----------
+           END &&
+           call procedure_name()
+
+     e.g :
+     DELIMITER &&
+     create procedure select_pre()
+     BEGIN
+	    select * from bank_details;
+     END &&
+
+     call select_pre()
+
+     DELIMITER &&
+     create procedure select_pre_filter()
+     BEGIN
+	    select * from bank_details where job = 'retired' and balance > 100;
+     END &&
+
+call select_pre_filter()
+
+# parsing arguments in procedure :  arguements are given as (IN variable_name variable_type)
+
+# e.g - 1 :
+
+DELIMITER &&
+create procedure select_pre_filter1(IN var int)
+BEGIN
+	select * from bank_details where job = 'retired' and balance > var;
+END &&
+
+call select_pre_filter1(200)
+
+# e.g - 2 :
+
+DELIMITER &&
+create procedure select_pre_filter2(IN var int, IN var1 varchar(30))
+BEGIN
+	select * from bank_details where job = var1 and balance > var;
+END &&
+
+call select_pre_filter2(100, 'services')
+
+
+# view :
+# we can extract some columns which we are using many times we can keep it in
+a view ( a virtual table) and then work on it when we don't want to work on other
+part of the table.
+# to keep this set of data in view is more efficient.
+
+# view is a subset of the original table.
+
+# e.g : select * from (select job, age, education, y from bank_details) as a where a.age = 58
+
+        select job, age, education , y from bank_details where age = 58
+
+  the first one in () will create a subset and second one from the entire table.
+  first one is more efficient.
+
+# now creating view table :
+create view bank_view as select job, age, education, y from bank_details
+
+select * from bank_view where age = 58
+
+# join :
+
+# creating a new copy of the same old table e.g : bank_details1
+
+inserting the same old data : insert into bank_details1 select * from bank_details
+
+inner join : between two dataset whatever is common.
+left outer join : the left dataset plus the common.
+right outer join : the right dataset plus the common.
+
+e.g : inner join : select bank_details.age, bank_details.job, bank_details.marital from bank_details inner join bank_details1 on bank_details.age = bank_details1.age
+
+
